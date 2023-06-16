@@ -34,6 +34,7 @@ async function run() {
    
     const danceDataBase = client.db("DanceScape");
     const classesCollection = danceDataBase.collection("Classes");
+    const selectedCourseCollection = danceDataBase.collection("SelectedCourse");
     const usersCollection = danceDataBase.collection("users");
     
 
@@ -68,7 +69,11 @@ app.get("/instructors", async(req, res)=>{
   res.send(result);
 });
 
-
+// find all user related api
+app.get("/users", async(req, res)=>{
+  const result = await usersCollection.find().toArray();
+  res.send(result)
+})
     
 
 // single user insert related api
@@ -80,9 +85,18 @@ app.post("/users",async(req, res)=>{
     return res.send({message: "User already exist!"})
   }
   const result = await usersCollection.insertOne(user);
-  console.log(result)
+  
   res.send(result);
 })
+
+
+// Selected class related posting api
+app.post("/selectedCourse", async(req, res)=>{
+  const course = req.body;
+  const result = await selectedCourseCollection.insertOne(course);
+  res.send(result);
+})
+
 
 
 
